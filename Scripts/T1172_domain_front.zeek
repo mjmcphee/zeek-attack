@@ -13,15 +13,13 @@
 ##! Will ID SSL connections and determine the SNI matches the HTTP host
 event connection_state_remove(c: connection) {
     
-    ##! Filter out non-SSL/TLS noise looking for presence of appropriate ssh information
+    ##! Filter out non-SSL/TLS noise
     if ( c?$ssl == F ) {
         return;
     }    
 
-    ##! For every connection id associated with a SSL/TLS session, check bonafides 
-        }
-    ##! If an SSH session has a ton of bytes, takes too long, or looks too big, it probably is - send an alert and log it!
-    if ( (c?$ssl == T) && ((c$http$host != hostc$ssl$server_name)) {
+    ##! For every connection id associated with a SSL/TLS session, check HTTP Host == SNI 
+    if ( (c?$ssl == T) && (c$http$host != hostc$ssl$server_name)) {
         
         ##! Print out alert to terminal
         print fmt ("[WARNING] Potential Domain Fronting Detected (ATT&CK T1172)");
